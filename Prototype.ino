@@ -7,7 +7,12 @@
 #define RightMotorDir   0 
 #define LeftMotorSpeed  4
 #define LeftMotorDir    2
+#define echoPin 14 // attach pin D5 Arduino to pin Echo of HC-SR04
+#define trigPin 12 //attach pin D12 Arduino to pin Trig of HC-SR04
 
+
+long duration; // variable for the duration of sound wave travel
+int distance; // variable for the distance measurement
 char auth[] = "BlynToken";
 char ssid[] = "your ssid";
 char pass[] = "wifi password";
@@ -109,6 +114,25 @@ void stopMoving(){
   
 }
 
+void ultrasonicDetection(){
+
+   // Clears the trigPin condition
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+  // Calculating the distance
+  distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
+
+
+}
+
+
+
 void setup()
 {
   Serial.begin(9600);
@@ -119,6 +143,8 @@ void setup()
   pinMode(LeftMotorSpeed, OUTPUT);
   pinMode(RightMotorDir, OUTPUT);
   pinMode(LeftMotorDir, OUTPUT);
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
+  pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
  
   digitalWrite(RightMotorSpeed, LOW);
   digitalWrite(LeftMotorSpeed, LOW);
@@ -133,6 +159,13 @@ void setup()
 
 void loop()
 {
+  ultrasonicDetection();
+
+  if (distance < 5){
+    stopMoving();
+  }else{
+    forward();
+  }
 
  
 }
