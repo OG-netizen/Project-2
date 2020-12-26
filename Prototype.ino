@@ -161,7 +161,7 @@ void loop()
 {
   ultrasonicDetection();
 
-  if (distance < 5){
+  if (distance < 7){
     stopMoving();
   }else{
     forward();
