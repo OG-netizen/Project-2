@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 #define BLYNK_PRINT Serial
 #include <ESP8266WiFi.h>
 
@@ -82,40 +84,6 @@ void moveControl(int x, int y)
   }
 }
 
-void setup()
-{
-  Serial.begin(9600);
- 
- 
-  // initial settings for motors off and direction forward
-  pinMode(RightMotorSpeed, OUTPUT);
-  pinMode(LeftMotorSpeed, OUTPUT);
-  pinMode(RightMotorDir, OUTPUT);
-  pinMode(LeftMotorDir, OUTPUT);
- 
-  digitalWrite(RightMotorSpeed, LOW);
-  digitalWrite(LeftMotorSpeed, LOW);
-  digitalWrite(RightMotorDir, HIGH);
-  digitalWrite(LeftMotorDir,HIGH);
-
- 
- }
-
-
-void loop()
-{
-
-
-    forward();  
-    delay(3000);
-    stopMoving();
-    delay(5000);  
- 
-}
-
-
-
-
 void reverse(){
 
   digitalWrite(RightMotorDir,HIGH);
@@ -140,3 +108,37 @@ void stopMoving(){
    analogWrite(LeftMotorSpeed,noSpeed);
   
 }
+
+void setup()
+{
+  Serial.begin(9600);
+ 
+ 
+  // initial settings for motors off and direction forward
+  pinMode(RightMotorSpeed, OUTPUT);
+  pinMode(LeftMotorSpeed, OUTPUT);
+  pinMode(RightMotorDir, OUTPUT);
+  pinMode(LeftMotorDir, OUTPUT);
+ 
+  digitalWrite(RightMotorSpeed, LOW);
+  digitalWrite(LeftMotorSpeed, LOW);
+  digitalWrite(RightMotorDir, HIGH);
+  digitalWrite(LeftMotorDir,HIGH);
+
+ 
+ }
+
+
+
+
+void loop()
+{
+
+ 
+}
+
+
+
+
+
+
