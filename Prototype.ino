@@ -8,8 +8,9 @@
 #define LeftMotorSpeed  4
 #define LeftMotorDir    2
 #define echoPin 14 // attach pin D5 Arduino to pin Echo of HC-SR04
-#define trigPin 12 //attach pin D12 Arduino to pin Trig of HC-SR04
-
+#define trigPin 12 //attach pin D6 Arduino to pin Trig of HC-SR04
+#define IRSensorRight 13 // attach pin D7 Arduino pin naar to Right IR 
+#define IRSensorLeft 15 // attach  pin D8 Arduino pin to left IR
 
 long duration; // variable for the duration of sound wave travel
 int distance; // variable for the distance measurement
@@ -145,6 +146,8 @@ void setup()
   pinMode(LeftMotorDir, OUTPUT);
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
   pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
+  pinMode(IRSensorLeft,INPUT);
+  pinMode(IRSensorRight,INPUT);
  
   digitalWrite(RightMotorSpeed, LOW);
   digitalWrite(LeftMotorSpeed, LOW);
