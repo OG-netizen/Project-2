@@ -93,9 +93,9 @@ void moveControl(int x, int y)
 void reverse(){
 
   digitalWrite(RightMotorDir,HIGH);
-    digitalWrite(LeftMotorDir,LOW);
-   analogWrite(RightMotorSpeed,maxSpeed);
-    analogWrite(LeftMotorSpeed,maxSpeed);
+  digitalWrite(LeftMotorDir,LOW);
+  analogWrite(RightMotorSpeed,maxSpeed);
+   analogWrite(LeftMotorSpeed,maxSpeed);
 }
 
 void forward(){
@@ -131,7 +131,6 @@ void ultrasonicDetection(){
 
 
 }
-
 
 
 void setup()
