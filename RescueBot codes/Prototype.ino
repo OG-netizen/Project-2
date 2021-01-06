@@ -170,9 +170,7 @@ void loop()
     forward();
   }
   
-  if(){
-  }
-
+  
  
 }
 
