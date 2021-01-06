@@ -11,6 +11,9 @@
 #define trigPin 12 //attach pin D6 Arduino to pin Trig of HC-SR04
 #define IRSensorRight 13 // attach pin D7 Arduino pin naar to Right IR 
 #define IRSensorLeft 15 // attach  pin D8 Arduino pin to left IR
+#define IRSensorMiddleRight 3 //attach pin rx to the middle right IR 
+#define IRSensorMiddleLeft 1 //attach pin tx to the middle left IR 
+
 
 long duration; // variable for the duration of sound wave travel
 int distance; // variable for the distance measurement
@@ -21,8 +24,8 @@ char pass[] = "wifi password";
 int minRange = 312;
 int maxRange = 712;
 
-int minSpeed = 450;
-int maxSpeed = 1020;
+int minSpeed = 225;
+int maxSpeed = 450;
 int noSpeed = 0;
 
 
@@ -101,9 +104,9 @@ void reverse(){
 void forward(){
 
   digitalWrite(RightMotorDir,LOW);
-    digitalWrite(LeftMotorDir,HIGH);
-   analogWrite(RightMotorSpeed,maxSpeed);
-    analogWrite(LeftMotorSpeed,maxSpeed);
+  digitalWrite(LeftMotorDir,HIGH);
+  analogWrite(RightMotorSpeed,maxSpeed);
+  analogWrite(LeftMotorSpeed,maxSpeed);
 
   
 }
@@ -114,6 +117,26 @@ void stopMoving(){
    analogWrite(LeftMotorSpeed,noSpeed);
   
 }
+
+void forwardLeft(){
+
+  digitalWrite(RightMotorDir,LOW);
+  digitalWrite(LeftMotorDir,HIGH);
+  analogWrite(RightMotorSpeed,maxSpeed);
+  analogWrite(LeftMotorSpeed,minSpeed);
+
+}
+
+void forwardRight(){
+
+  digitalWrite(RightMotorDir,LOW);
+  digitalWrite(LeftMotorDir,HIGH);
+  analogWrite(RightMotorSpeed,minSpeed);
+  analogWrite(LeftMotorSpeed,maxSpeed);
+
+
+}
+
 
 void ultrasonicDetection(){
 
@@ -147,7 +170,10 @@ void setup()
   pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
   pinMode(IRSensorLeft,INPUT);
   pinMode(IRSensorRight,INPUT);
- 
+  pinMode(IRSensorMiddleLeft,INPUT);
+  pinMode(IRSensorMiddleRight,INPUT);
+
+  // set deafult motor direction
   digitalWrite(RightMotorSpeed, LOW);
   digitalWrite(LeftMotorSpeed, LOW);
   digitalWrite(RightMotorDir, HIGH);
@@ -163,11 +189,40 @@ void loop()
 {
   ultrasonicDetection();
 
-  if (distance < 7){
-    stopMoving();
-  }else{
-    forward();
+  int Right = digitalRead(IRSensorRight);
+  int Left= digitalRead(IRSensorLeft);
+  int middleLeft = digitalRead(IRSensorMiddleLeft);
+  int middleRight = digitalRead(IRSensorMiddleRight);
+
+  if(Right == HIGH){
+
+  Serial.println("Right sensor detect something");
+
   }
+
+  
+  if(Left == HIGH){
+
+  Serial.println("Right sensor detect something");
+
+  }
+
+  
+  if(middleLeft == HIGH){
+
+  Serial.println(" middle left sensor detect something");
+
+  }
+
+  
+  if(middleRight == HIGH){
+
+  Serial.println("Middle Right sensor detect something");
+
+  }
+
+
+
   
   
  
