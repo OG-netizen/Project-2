@@ -11,12 +11,13 @@
 #define trigPin 12 //attach pin D6 Arduino to pin Trig of HC-SR04
 #define IRSensorRight 13 // attach pin D7 Arduino pin naar to Right IR 
 #define IRSensorLeft 15 // attach  pin D8 Arduino pin to left IR
-#define IRSensorMiddleRight 3 //attach pin rx to the middle right IR 
-#define IRSensorMiddleLeft 1 //attach pin tx to the middle left IR 
+
 
 
 long duration; // variable for the duration of sound wave travel
-int distance; // variable for the distance measurement
+int distance,Right,Left = 0; 
+
+
 char auth[] = "BlynToken";
 char ssid[] = "your ssid";
 char pass[] = "wifi password";
@@ -27,6 +28,7 @@ int maxRange = 712;
 int minSpeed = 225;
 int maxSpeed = 450;
 int noSpeed = 0;
+
 
 
 void moveControl(int x, int y)
@@ -156,6 +158,30 @@ void ultrasonicDetection(){
 }
 
 
+void IR(){
+
+  Right = digitalRead(IRSensorRight);
+  Left= digitalRead(IRSensorLeft);
+
+}
+
+void DetermineForward(){
+
+
+  if(distance < 13){
+
+    stopMoving();
+
+  }else{
+
+    forward();
+
+  }
+
+
+
+}
+
 void setup()
 {
   Serial.begin(9600);
@@ -170,8 +196,7 @@ void setup()
   pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
   pinMode(IRSensorLeft,INPUT);
   pinMode(IRSensorRight,INPUT);
-  pinMode(IRSensorMiddleLeft,INPUT);
-  pinMode(IRSensorMiddleRight,INPUT);
+  
 
   // set deafult motor direction
   digitalWrite(RightMotorSpeed, LOW);
@@ -188,38 +213,37 @@ void setup()
 void loop()
 {
   ultrasonicDetection();
+  IR();
 
-  int Right = digitalRead(IRSensorRight);
-  int Left= digitalRead(IRSensorLeft);
-  int middleLeft = digitalRead(IRSensorMiddleLeft);
-  int middleRight = digitalRead(IRSensorMiddleRight);
+  
+  
+  if(Left == HIGH && Right == LOW){
 
-  if(Right == HIGH){
+    forwardRight();
 
-  Serial.println("Right sensor detect something");
+  }else if (Left == LOW && Right == LOW){
+
+    DetermineForward();
+
 
   }
 
   
-  if(Left == HIGH){
+  
+  if(Left == LOW && Right == HIGH){
+    forwardLeft();
+ 
+  }else if (Left == LOW && Right == LOW){
 
-  Serial.println("Right sensor detect something");
+    DetermineForward();
+
 
   }
 
   
-  if(middleLeft == HIGH){
-
-  Serial.println(" middle left sensor detect something");
-
-  }
 
   
-  if(middleRight == HIGH){
-
-  Serial.println("Middle Right sensor detect something");
-
-  }
+ 
 
 
 
