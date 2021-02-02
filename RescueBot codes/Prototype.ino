@@ -9,10 +9,10 @@
 #define LeftMotorDir    2
 #define echoPin 14 // attach pin D5 Arduino to pin Echo of HC-SR04
 #define trigPin 12 //attach pin D6 Arduino to pin Trig of HC-SR04
-#define IRSensorRight 13 // attach pin D7 Arduino pin naar to Right IR 
-#define IRSensorLeft 15 // attach  pin D8 Arduino pin to left IR
+#define IRSensorRight 15 // attach pin D7 Arduino pin naar to Right IR 
+#define IRSensorLeft 13 // attach  pin D8 Arduino pin to  left IR
 
-
+int state = 1;
 
 long duration; // variable for the duration of sound wave travel
 int distance,Right,Left = 0; 
@@ -25,8 +25,8 @@ char pass[] = "wifi password";
 int minRange = 312;
 int maxRange = 712;
 
-int minSpeed = 225;
-int maxSpeed = 450;
+int minSpeed = 200;
+int maxSpeed = 600;
 int noSpeed = 0;
 
 
@@ -97,7 +97,7 @@ void moveControl(int x, int y)
 
 void reverse(){
 
-  digitalWrite(RightMotorDir,HIGH);
+  digitalWrite(RightMotorDir,LOW);
   digitalWrite(LeftMotorDir,LOW);
   analogWrite(RightMotorSpeed,maxSpeed);
    analogWrite(LeftMotorSpeed,maxSpeed);
@@ -105,10 +105,10 @@ void reverse(){
 
 void forward(){
 
-  digitalWrite(RightMotorDir,LOW);
+  digitalWrite(RightMotorDir,HIGH);
   digitalWrite(LeftMotorDir,HIGH);
-  analogWrite(RightMotorSpeed,maxSpeed);
-  analogWrite(LeftMotorSpeed,maxSpeed);
+  analogWrite(RightMotorSpeed,600);
+  analogWrite(LeftMotorSpeed,600);
 
   
 }
@@ -122,16 +122,39 @@ void stopMoving(){
 
 void forwardLeft(){
 
-  digitalWrite(RightMotorDir,LOW);
+  digitalWrite(RightMotorDir,HIGH);
   digitalWrite(LeftMotorDir,HIGH);
   analogWrite(RightMotorSpeed,maxSpeed);
-  analogWrite(LeftMotorSpeed,minSpeed);
+  analogWrite(LeftMotorSpeed, minSpeed);
 
+}
+
+void reverseLeft(){
+
+
+   digitalWrite(RightMotorDir,LOW);
+  digitalWrite(LeftMotorDir,LOW);
+  analogWrite(RightMotorSpeed,maxSpeed);
+   analogWrite(LeftMotorSpeed,minSpeed);
+
+  
+}
+
+
+void reverseRight(){
+
+
+   digitalWrite(RightMotorDir,LOW);
+  digitalWrite(LeftMotorDir,LOW);
+  analogWrite(RightMotorSpeed,minSpeed);
+   analogWrite(LeftMotorSpeed,maxSpeed);
+
+  
 }
 
 void forwardRight(){
 
-  digitalWrite(RightMotorDir,LOW);
+  digitalWrite(RightMotorDir,HIGH);
   digitalWrite(LeftMotorDir,HIGH);
   analogWrite(RightMotorSpeed,minSpeed);
   analogWrite(LeftMotorSpeed,maxSpeed);
@@ -139,6 +162,27 @@ void forwardRight(){
 
 }
 
+
+void TurnRight(){
+
+  digitalWrite(RightMotorDir,HIGH);
+  digitalWrite(LeftMotorDir,HIGH);
+  analogWrite(RightMotorSpeed,0);
+  analogWrite(LeftMotorSpeed,maxSpeed);
+
+
+}
+
+
+void TurnLeft(){
+
+  digitalWrite(RightMotorDir,HIGH);
+  digitalWrite(LeftMotorDir,HIGH);
+  analogWrite(RightMotorSpeed,maxSpeed);
+  analogWrite(LeftMotorSpeed,100);
+
+
+}
 
 void ultrasonicDetection(){
 
@@ -161,24 +205,28 @@ void ultrasonicDetection(){
 void IR(){
 
   Right = digitalRead(IRSensorRight);
-  Left= digitalRead(IRSensorLeft);
+  Left = digitalRead(IRSensorLeft);
 
 }
 
-void DetermineForward(){
+void DetermineForward(){  // function to determine positionn 
 
+  if(distance < 15){
 
-  if(distance < 13){
-
-    stopMoving();
-
+   
+    TurnRight();
+    delay(1500);
+    forward();
+    delay(500);
+    forwardLeft();
+    delay(1500);
+    
+    
   }else{
 
     forward();
 
   }
-
-
 
 }
 
@@ -197,16 +245,10 @@ void setup()
   pinMode(IRSensorLeft,INPUT);
   pinMode(IRSensorRight,INPUT);
   
-
-  // set deafult motor direction
-  digitalWrite(RightMotorSpeed, LOW);
-  digitalWrite(LeftMotorSpeed, LOW);
-  digitalWrite(RightMotorDir, HIGH);
-  digitalWrite(LeftMotorDir,HIGH);
+ digitalWrite(RightMotorDir,HIGH);
 
  
  }
-
 
 
 
@@ -215,45 +257,44 @@ void loop()
   ultrasonicDetection();
   IR();
 
-  
-  
-  if(Left == HIGH && Right == LOW){
 
-    forwardRight();
 
-  }else if (Left == LOW && Right == LOW){
+ if (Right == 0 && Left == 0){
 
     DetermineForward();
-
-
-  }
-
-  
-  
-  if(Left == LOW && Right == HIGH){
+    
+  }else if(Right == 1 && Left == 0){
+ 
     forwardLeft();
- 
-  }else if (Left == LOW && Right == LOW){
-
-    DetermineForward();
-
-
+    
+   
+  }else if(Right == 0 && Left == 1){
+     
+   forwardRight();
+   
+     
   }
 
-  
+   if(Right == 1 && Left == 1){
 
-  
+    if(state == 2){
+      reverse();
+      delay(2000);
+      TurnLeft();
+      delay(1500);
+    }
+
+    if(state == 1){ 
+
+      reverse();
+      delay(2000);
+      TurnRight();
+      delay(1500);
+     
+
+    }
+    
+   }
  
-
-
-
   
-  
- 
 }
-
-
-
-
-
-
